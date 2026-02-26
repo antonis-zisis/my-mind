@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment — never commit real credentials
+.env
+.env.local
+.env.*.local
+
+# Vite
+*.local
+vite.config.ts.timestamp-*
+
+# Editor / OS
+.DS_Store
+.vscode/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Claude Code local session data
+.claude/
