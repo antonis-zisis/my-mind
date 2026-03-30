@@ -22,6 +22,3 @@ vite.config.ts.timestamp-*
 *.njsproj
 *.sln
 *.sw?
-
-# Claude Code local session data
-.claude/
