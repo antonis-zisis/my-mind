@@ -14,6 +14,9 @@ dist-ssr/
 *.local
 vite.config.ts.timestamp-*
 
+# Claude Code
+.claude/settings.local.json
+
 # Editor / OS
 .DS_Store
 .vscode/
