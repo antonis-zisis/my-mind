@@ -14,7 +14,7 @@ const SAVE_DELAY_MS = 1500;
 
 function stripUndefined(obj: Record<string, unknown>): Record<string, unknown> {
   return Object.fromEntries(
-    Object.entries(obj).filter(([, v]) => v !== undefined)
+    Object.entries(obj).filter(([, value]) => value !== undefined)
   );
 }
 
@@ -49,7 +49,10 @@ export function useDiagram(uid: string) {
   const skipSave = useRef(true);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const latestRef = useRef({ nodes, edges });
-  latestRef.current = { nodes, edges };
+
+  useEffect(() => {
+    latestRef.current = { nodes, edges };
+  });
 
   // load from Firestore on mount
   useEffect(() => {
@@ -79,15 +82,17 @@ export function useDiagram(uid: string) {
       return;
     }
 
-    setSaveStatus('saving');
-    if (saveTimer.current) clearTimeout(saveTimer.current);
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+    }
 
     saveTimer.current = setTimeout(() => {
-      const { nodes: n, edges: e } = latestRef.current;
+      setSaveStatus('saving');
+      const { nodes: latestNodes, edges: latestEdges } = latestRef.current;
       const diagramRef = doc(db, 'diagrams', uid);
       setDoc(diagramRef, {
-        nodes: serializeNodes(n),
-        edges: serializeEdges(e),
+        nodes: serializeNodes(latestNodes),
+        edges: serializeEdges(latestEdges),
         updatedAt: Date.now(),
       })
         .then(() => setSaveStatus('saved'))
@@ -95,7 +100,9 @@ export function useDiagram(uid: string) {
     }, SAVE_DELAY_MS);
 
     return () => {
-      if (saveTimer.current) clearTimeout(saveTimer.current);
+      if (saveTimer.current) {
+        clearTimeout(saveTimer.current);
+      }
     };
   }, [nodes, edges, uid]);
 
@@ -112,13 +119,16 @@ export function useDiagram(uid: string) {
   const updateNode = useCallback(
     (id: string, patch: Partial<AppNode['data']>) => {
       setNodes((nds) =>
-        nds.map((n) => {
-          if (n.id !== id) return n;
+        nds.map((node) => {
+          if (node.id !== id) {
+            return node;
+          }
+
           return {
-            ...n,
+            ...node,
             // keep node.type in sync when kind changes
-            type: patch.kind ?? n.data.kind,
-            data: { ...n.data, ...patch },
+            type: patch.kind ?? node.data.kind,
+            data: { ...node.data, ...patch },
           };
         })
       );
@@ -128,8 +138,10 @@ export function useDiagram(uid: string) {
 
   const deleteNode = useCallback(
     (id: string) => {
-      setNodes((nds) => nds.filter((n) => n.id !== id));
-      setEdges((eds) => eds.filter((e) => e.source !== id && e.target !== id));
+      setNodes((nds) => nds.filter((node) => node.id !== id));
+      setEdges((eds) =>
+        eds.filter((edge) => edge.source !== id && edge.target !== id)
+      );
     },
     [setNodes, setEdges]
   );
