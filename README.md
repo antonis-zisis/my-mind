@@ -1,8 +1,12 @@
 # My Mind
 
-A personal infrastructure map — a living diagram of your projects, the services they depend on, and how everything connects.
+[![Netlify Status](https://api.netlify.com/api/v1/badges/e688c661-6513-4a02-94c7-be1ace10646d/deploy-status)](https://app.netlify.com/projects/az-my-mind/deploys)
 
-Built with React Flow, Firebase, and Vite. Self-hostable: bring your own Firebase project and deploy anywhere that serves a static site.
+A personal infrastructure map. A living diagram of your projects, the services they depend on, and how everything connects.
+
+Built with React Flow, Firebase, and Vite.
+
+Self-hostable: bring your own Firebase project and deploy anywhere that serves a static site.
 
 ## Features
 
@@ -27,7 +31,9 @@ Built with React Flow, Firebase, and Vite. Self-hostable: bring your own Firebas
 
 ## Self-hosting
 
-The app stores all data in **your own Firebase project** — nothing is shared with anyone else. Each Google-authenticated user gets their own private diagram document in Firestore.
+The app stores all data in **your own Firebase project** — nothing is shared with anyone else.
+
+Each Google-authenticated user gets their own private diagram document in Firestore.
 
 ### 1. Create a Firebase project
 
