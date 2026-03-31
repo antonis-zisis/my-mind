@@ -54,7 +54,10 @@ export default function DiagramCanvas({
   );
 
   const displayEdges = useMemo(() => {
-    if (!selectedNodeId) return edges;
+    if (!selectedNodeId) {
+      return edges;
+    }
+
     return edges.map((edge) => {
       const isConnected =
         edge.source === selectedNodeId || edge.target === selectedNodeId;
@@ -63,7 +66,7 @@ export default function DiagramCanvas({
   }, [edges, selectedNodeId]);
 
   return (
-    <div className="flex-1 h-full">
+    <div className="h-full flex-1">
       <ReactFlow
         nodes={nodes}
         edges={displayEdges}
@@ -85,15 +88,15 @@ export default function DiagramCanvas({
           color="#2e3347"
         />
         <Panel position="top-left">
-          <div className="flex items-center border border-border rounded overflow-hidden text-xs shadow-sm">
+          <div className="border-border flex items-center overflow-hidden rounded border text-xs shadow-sm">
             <button
-              className={`px-3 py-1.5 cursor-pointer transition-colors duration-150 ${compact ? 'bg-primary text-white' : 'bg-surface text-muted hover:text-text'}`}
+              className={`cursor-pointer px-3 py-1.5 transition-colors duration-150 ${compact ? 'bg-primary text-white' : 'bg-surface text-muted hover:text-text'}`}
               onClick={() => onCompactChange(true)}
             >
               Compact
             </button>
             <button
-              className={`px-3 py-1.5 cursor-pointer transition-colors duration-150 border-l border-border ${!compact ? 'bg-primary text-white' : 'bg-surface text-muted hover:text-text'}`}
+              className={`border-border cursor-pointer border-l px-3 py-1.5 transition-colors duration-150 ${!compact ? 'bg-primary text-white' : 'bg-surface text-muted hover:text-text'}`}
               onClick={() => onCompactChange(false)}
             >
               Detailed
@@ -105,7 +108,7 @@ export default function DiagramCanvas({
         {saveStatus !== 'idle' && (
           <Panel position="bottom-center">
             <div
-              className={`text-[11px] px-3 py-1 rounded-full font-medium tracking-wide border ${
+              className={`rounded-full border px-3 py-1 text-[11px] font-medium tracking-wide ${
                 saveStatus === 'saving'
                   ? 'bg-surface-2 text-muted border-border'
                   : 'bg-service text-service-text border-service-border'

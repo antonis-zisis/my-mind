@@ -24,7 +24,7 @@ export default function DiagramPage() {
     updateNode,
   } = useDiagram(uid);
 
-  const selectedNode = nodes.find((n) => n.selected) ?? null;
+  const selectedNode = nodes.find((node) => node.selected) ?? null;
   const [compact, setCompact] = useState(
     () => localStorage.getItem('diagram-view') !== 'detailed'
   );
@@ -36,7 +36,7 @@ export default function DiagramPage() {
 
   if (diagramLoading) {
     return (
-      <div className="h-dvh flex items-center justify-center text-sm text-muted">
+      <div className="text-muted flex h-dvh items-center justify-center text-sm">
         Loading your diagram…
       </div>
     );
@@ -45,9 +45,9 @@ export default function DiagramPage() {
   return (
     <CompactContext.Provider value={compact}>
       <ReactFlowProvider>
-        <div className="h-dvh flex flex-col">
-          <header className="h-[52px] shrink-0 bg-surface border-b border-border flex items-center justify-between px-5">
-            <span className="text-base font-bold text-text">
+        <div className="flex h-dvh flex-col">
+          <header className="bg-surface border-border flex h-13 shrink-0 items-center justify-between border-b px-5">
+            <span className="text-text text-base font-bold">
               🧠 My Mind - Infrastructure Map
             </span>
             <div className="flex items-center gap-2.5">
@@ -55,14 +55,14 @@ export default function DiagramPage() {
                 <img
                   src={user.photoURL}
                   alt=""
-                  className="w-7 h-7 rounded-full border-2 border-border"
+                  className="border-border h-7 w-7 rounded-full border-2"
                 />
               )}
-              <span className="text-sm text-muted">
+              <span className="text-muted text-sm">
                 {user?.displayName ?? user?.email}
               </span>
               <button
-                className="text-xs px-2.5 py-1 bg-transparent border border-border text-muted rounded hover:border-danger hover:text-danger transition-colors duration-150 cursor-pointer"
+                className="border-border text-muted hover:border-danger hover:text-danger cursor-pointer rounded border bg-transparent px-2.5 py-1 text-xs transition-colors duration-150"
                 onClick={() => signOut(auth)}
               >
                 Sign out
@@ -70,7 +70,7 @@ export default function DiagramPage() {
             </div>
           </header>
 
-          <div className="flex-1 flex overflow-hidden">
+          <div className="flex flex-1 overflow-hidden">
             <Sidebar
               onAddNode={addNode}
               selectedNode={selectedNode}

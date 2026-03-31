@@ -16,7 +16,7 @@ export default function ProjectNode({
 
   return (
     <div
-      className={`px-4 py-3 rounded-[10px] border-2 w-[200px] text-sm bg-project border-project-border text-project-text transition-shadow ${
+      className={`bg-project border-project-border text-project-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
         selected ? 'shadow-[0_0_0_3px_rgba(99,102,241,0.4)]' : ''
       }`}
       style={data.color ? { borderColor: data.color } : undefined}
@@ -34,18 +34,18 @@ export default function ProjectNode({
         className={handleClass}
       />
 
-      <div className="font-semibold text-sm leading-tight truncate text-center mb-1">
+      <div className="mb-1 truncate text-center text-sm leading-tight font-semibold">
         {data.label}
       </div>
-      <div className="text-[10px] font-semibold uppercase tracking-widest opacity-60 text-center">
+      <div className="text-center text-[10px] font-semibold tracking-widest uppercase opacity-60">
         project
       </div>
 
       {!compact && hasContent && (
         <>
-          <div className="border-t border-project-border opacity-30 mt-2" />
+          <div className="border-project-border mt-2 border-t opacity-30" />
           {data.description && (
-            <div className="text-[11px] opacity-70 mt-2 leading-snug line-clamp-2">
+            <div className="mt-2 line-clamp-2 text-[11px] leading-snug opacity-70">
               {data.description}
             </div>
           )}
@@ -54,8 +54,8 @@ export default function ProjectNode({
               href={data.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="block text-[10px] opacity-50 mt-1 truncate no-underline text-inherit hover:opacity-90 hover:underline"
-              onClick={(e) => e.stopPropagation()}
+              className="mt-1 block truncate text-[10px] text-inherit no-underline opacity-50 hover:underline hover:opacity-90"
+              onClick={(event) => event.stopPropagation()}
             >
               {data.url}
             </a>

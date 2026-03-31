@@ -14,7 +14,9 @@ export default function LoginPage() {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (user) navigate('/', { replace: true });
+    if (user) {
+      navigate('/', { replace: true });
+    }
   }, [user, navigate]);
 
   async function handleGoogleSignIn() {
@@ -34,23 +36,23 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="h-dvh flex items-center justify-center bg-bg">
-      <div className="bg-surface border border-border rounded-2xl p-12 text-center w-[360px] shadow-2xl">
-        <div className="text-5xl mb-4">🧠</div>
-        <h1 className="text-3xl font-bold text-text mt-0 mb-2">My Mind</h1>
-        <p className="text-sm text-muted mt-0 mb-8">
+    <div className="bg-bg flex h-dvh items-center justify-center">
+      <div className="bg-surface border-border w-90 rounded-2xl border p-12 text-center shadow-2xl">
+        <div className="mb-4 text-5xl">🧠</div>
+        <h1 className="text-text mt-0 mb-2 text-3xl font-bold">My Mind</h1>
+        <p className="text-muted mt-0 mb-8 text-sm">
           Your personal infrastructure map
         </p>
 
         <button
-          className="flex items-center justify-center gap-2.5 w-full px-4 py-3 bg-surface-2 border border-border text-text text-sm font-medium rounded-lg hover:bg-surface hover:border-primary transition-colors duration-150 cursor-pointer"
+          className="bg-surface-2 border-border text-text hover:bg-surface hover:border-primary flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-lg border px-4 py-3 text-sm font-medium transition-colors duration-150"
           onClick={handleGoogleSignIn}
         >
           <GoogleIcon />
           Sign in with Google
         </button>
 
-        {error && <p className="mt-4 text-sm text-danger">{error}</p>}
+        {error && <p className="text-danger mt-4 text-sm">{error}</p>}
       </div>
     </div>
   );
