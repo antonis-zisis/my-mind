@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { type SubmitEvent, useState, useId } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import type { NodeKind, AppNode, NodeData } from '../types';
 
@@ -29,7 +29,7 @@ function NodeForm({
   formId: string;
   form: typeof defaultForm;
   setForm: React.Dispatch<React.SetStateAction<typeof defaultForm>>;
-  onSubmit: (event: React.FormEvent) => void;
+  onSubmit: (event: SubmitEvent) => void;
   submitLabel: string;
 }) {
   return (
@@ -145,7 +145,7 @@ function EditSection({
     tags: selectedNode.data.tags?.join(', ') ?? '',
   });
 
-  function handleUpdate(event: React.FormEvent) {
+  function handleUpdate(event: SubmitEvent) {
     event.preventDefault();
 
     if (!editForm.label.trim()) {
@@ -154,7 +154,7 @@ function EditSection({
 
     const tags = editForm.tags
       .split(',')
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
 
     onUpdateNode(selectedNode.id, {
@@ -168,14 +168,12 @@ function EditSection({
 
   return (
     <>
-      <div>
-        <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
-          Edit node
+      <div className="flex min-w-0 items-baseline gap-1.5">
+        <h2 className="text-muted m-0 shrink-0 truncate text-xs font-semibold tracking-widest uppercase">
+          Edit {selectedNode.data.label}
         </h2>
-        <p className="text-muted mt-1 mb-0 truncate text-[11px]">
-          {selectedNode.data.label}
-        </p>
       </div>
+
       <NodeForm
         formId={editFormId}
         form={editForm}
@@ -196,7 +194,7 @@ export default function Sidebar({
   const { screenToFlowPosition } = useReactFlow();
   const addFormId = useId();
 
-  function handleAdd(event: React.FormEvent) {
+  function handleAdd(event: SubmitEvent) {
     event.preventDefault();
 
     if (!addForm.label.trim()) {
@@ -210,7 +208,7 @@ export default function Sidebar({
 
     const tags = addForm.tags
       .split(',')
-      .map((t) => t.trim())
+      .map((tag) => tag.trim())
       .filter(Boolean);
 
     onAddNode({
@@ -231,28 +229,14 @@ export default function Sidebar({
   return (
     <aside className="bg-surface border-border flex w-60 shrink-0 flex-col gap-5 overflow-y-auto border-r p-5">
       {selectedNode ? (
-        <>
-          <EditSection
-            key={selectedNode.id}
-            selectedNode={selectedNode}
-            onUpdateNode={onUpdateNode}
-          />
-          <div className="border-border border-t pt-4">
-            <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
-              Add node
-            </h2>
-          </div>
-          <NodeForm
-            formId={addFormId}
-            form={addForm}
-            setForm={setAddForm}
-            onSubmit={handleAdd}
-            submitLabel="+ Add node"
-          />
-        </>
+        <EditSection
+          key={selectedNode.id}
+          selectedNode={selectedNode}
+          onUpdateNode={onUpdateNode}
+        />
       ) : (
         <>
-          <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
+          <h2 className="text-muted m-0 text-xs font-semibold tracking-widest uppercase">
             Add node
           </h2>
           <NodeForm
