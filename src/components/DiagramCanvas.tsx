@@ -83,6 +83,8 @@ export default function DiagramCanvas({
         onBeforeDelete={onBeforeDelete}
         nodeTypes={nodeTypes}
         deleteKeyCode={['Delete', 'Backspace']}
+        snapToGrid
+        snapGrid={[20, 20]}
         connectionMode={ConnectionMode.Loose}
         fitView
         fitViewOptions={{ padding: 0.3 }}
