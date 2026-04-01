@@ -13,6 +13,7 @@ const defaultForm = {
   kind: 'service' as NodeKind,
   description: '',
   url: '',
+  tags: '',
 };
 
 const inputClass =
@@ -100,6 +101,24 @@ function NodeForm({
         />
       </div>
 
+      <div className="flex flex-col gap-1">
+        <label className="text-muted text-xs" htmlFor={`${formId}-tags`}>
+          Tags
+        </label>
+        <input
+          id={`${formId}-tags`}
+          className={inputClass}
+          value={form.tags}
+          onChange={(event) =>
+            setForm((func) => ({ ...func, tags: event.target.value }))
+          }
+          placeholder="e.g. infra, backend, db"
+        />
+        <span className="text-muted text-[11px] opacity-60">
+          Comma-separated
+        </span>
+      </div>
+
       <button
         type="submit"
         className="bg-primary hover:bg-primary-light mt-1 cursor-pointer rounded border-none px-3 py-2 text-[13px] font-semibold text-white transition-colors duration-150"
@@ -123,6 +142,7 @@ function EditSection({
     kind: selectedNode.data.kind,
     description: selectedNode.data.description ?? '',
     url: selectedNode.data.url ?? '',
+    tags: selectedNode.data.tags?.join(', ') ?? '',
   });
 
   function handleUpdate(event: React.FormEvent) {
@@ -132,11 +152,17 @@ function EditSection({
       return;
     }
 
+    const tags = editForm.tags
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
     onUpdateNode(selectedNode.id, {
       label: editForm.label.trim(),
       kind: editForm.kind,
       description: editForm.description.trim() || undefined,
       url: editForm.url.trim() || undefined,
+      tags: tags.length ? tags : undefined,
     });
   }
 
@@ -182,6 +208,11 @@ export default function Sidebar({
       y: window.innerHeight / 2 + Math.random() * 100 - 50,
     });
 
+    const tags = addForm.tags
+      .split(',')
+      .map((t) => t.trim())
+      .filter(Boolean);
+
     onAddNode({
       id: `${Date.now()}`,
       type: addForm.kind,
@@ -191,6 +222,7 @@ export default function Sidebar({
         kind: addForm.kind,
         description: addForm.description.trim() || undefined,
         url: addForm.url.trim() || undefined,
+        tags: tags.length ? tags : undefined,
       } satisfies NodeData,
     });
     setAddForm(defaultForm);

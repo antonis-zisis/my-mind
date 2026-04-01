@@ -12,7 +12,7 @@ export default function ServiceNode({
   selected,
 }: NodeProps<ServiceNodeType>) {
   const compact = useCompact();
-  const hasContent = !!(data.description || data.url);
+  const hasContent = !!(data.description || data.url || data.tags?.length);
 
   return (
     <div
@@ -59,6 +59,18 @@ export default function ServiceNode({
             >
               {data.url}
             </a>
+          )}
+          {data.tags && data.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {data.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] leading-none opacity-70"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
         </>
       )}

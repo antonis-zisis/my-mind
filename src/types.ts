@@ -7,6 +7,7 @@ export interface NodeData extends Record<string, unknown> {
   kind: NodeKind;
   description?: string;
   url?: string;
+  tags?: string[];
   color?: string;
 }
 
