@@ -48,8 +48,9 @@ export default function DiagramPage() {
         <div className="flex h-dvh flex-col">
           <header className="bg-surface border-border flex h-13 shrink-0 items-center justify-between border-b px-5">
             <span className="text-text text-base font-bold">
-              🧠 My Mind - Infrastructure Map
+              My Mind - Infrastructure Map
             </span>
+
             <div className="flex items-center gap-2.5">
               {user?.photoURL && (
                 <img
@@ -58,9 +59,11 @@ export default function DiagramPage() {
                   className="border-border h-7 w-7 rounded-full border-2"
                 />
               )}
+
               <span className="text-muted text-sm">
                 {user?.displayName ?? user?.email}
               </span>
+
               <button
                 className="border-border text-muted hover:border-danger hover:text-danger cursor-pointer rounded border bg-transparent px-2.5 py-1 text-xs transition-colors duration-150"
                 onClick={() => signOut(auth)}
