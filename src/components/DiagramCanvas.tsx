@@ -10,7 +10,12 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import type { AppEdge, AppNode } from '../types';
-import type { OnNodesChange, OnEdgesChange, OnConnect } from '@xyflow/react';
+import type {
+  OnNodesChange,
+  OnEdgesChange,
+  OnConnect,
+  OnBeforeDelete,
+} from '@xyflow/react';
 import ProjectNode from './nodes/ProjectNode';
 import ServiceNode from './nodes/ServiceNode';
 
@@ -28,6 +33,7 @@ interface Props {
   onNodesChange: OnNodesChange<AppNode>;
   onEdgesChange: OnEdgesChange<AppEdge>;
   onConnect: OnConnect;
+  onBeforeDelete: OnBeforeDelete<AppNode, AppEdge>;
   saveStatus: 'saved' | 'saving' | 'idle';
 }
 
@@ -46,6 +52,7 @@ export default function DiagramCanvas({
   onNodesChange,
   onEdgesChange,
   onConnect,
+  onBeforeDelete,
   saveStatus,
 }: Props) {
   const minimapNodeColor = useMemo(
@@ -73,6 +80,7 @@ export default function DiagramCanvas({
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
+        onBeforeDelete={onBeforeDelete}
         nodeTypes={nodeTypes}
         deleteKeyCode={['Delete', 'Backspace']}
         connectionMode={ConnectionMode.Loose}
