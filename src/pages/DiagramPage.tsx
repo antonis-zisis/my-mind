@@ -38,7 +38,7 @@ export default function DiagramPage() {
   const handleBeforeDelete: OnBeforeDelete<AppNode, AppEdge> = useCallback(
     ({ nodes: deletedNodes }) => {
       if (deletedNodes.length === 0) {
-        return true;
+        return Promise.resolve(true);
       }
 
       const name =
