@@ -8,12 +8,17 @@ Built with React Flow, Firebase, and Vite.
 
 Self-hostable: bring your own Firebase project and deploy anywhere that serves a static site.
 
+![My Mind screenshot](src/docs/my-mind.png)
+
 ## Features
 
 - **Interactive diagram** — drag nodes, draw connections, pan and zoom freely
 - **Two node types** — _Projects_ (things you build) and _Services/Tools_ (things you use)
-- **Per-node metadata** — name, description, and URL
+- **Per-node metadata** — name, description, URL, and tags
 - **Edit nodes** — click any node to select it and edit its details in the sidebar
+- **Delete confirmation** — a dialog prompts before any node is removed
+- **Snap to grid** — nodes snap to a 10px grid while dragging for tidy layouts
+- **Focus on double-click** — double-click any node to zoom in and center it
 - **Auth** — sign in with Google; each user owns their own private diagram
 - **Auto-save** — changes are debounced and persisted to Firestore automatically
 - **Dark theme**
@@ -96,15 +101,16 @@ The app is a standard static build (`npm run build` → `dist/`). Deploy it to a
 
 ## Usage
 
-| Action        | How                                                                            |
-| ------------- | ------------------------------------------------------------------------------ |
-| Add a node    | Fill in the sidebar form and click _+ Add node_                                |
-| Edit a node   | Click the node to select it — its details appear in the sidebar                |
-| Move a node   | Drag it freely on the canvas                                                   |
-| Connect nodes | Drag from the right-side handle of one node to the left-side handle of another |
-| Delete a node | Select it and press `Delete` or `Backspace`                                    |
-| Pan           | Drag the canvas background                                                     |
-| Zoom          | Scroll wheel, or use the controls in the bottom-left                           |
+| Action        | How                                                                  |
+| ------------- | -------------------------------------------------------------------- |
+| Add a node    | Fill in the sidebar form and click _+ Add node_                      |
+| Edit a node   | Click the node to select it — its details appear in the sidebar      |
+| Move a node   | Drag it on the canvas; nodes snap to a 10px grid                     |
+| Connect nodes | Drag from any handle on one node to any handle on another            |
+| Focus a node  | Double-click it to zoom in and center the viewport on it             |
+| Delete a node | Select it and press `Delete` or `Backspace`, then confirm the dialog |
+| Pan           | Drag the canvas background                                           |
+| Zoom          | Scroll wheel, or use the controls in the bottom-left                 |
 
 Changes are saved automatically after a short delay. A _Saved_ indicator appears in the bottom of the canvas.
 
