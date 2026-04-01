@@ -6,7 +6,7 @@ A personal infrastructure map. A living diagram of your projects, the services t
 
 Built with React Flow, Firebase, and Vite.
 
-Self-hostable: bring your own Firebase project and deploy anywhere that serves a static site.1
+Self-hostable: bring your own Firebase project and deploy anywhere that serves a static site.
 
 ![My Mind screenshot](src/docs/my-mind.png)
 
