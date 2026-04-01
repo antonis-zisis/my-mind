@@ -1,4 +1,4 @@
-import { useState, useId } from 'react';
+import { type SubmitEvent, useState, useId } from 'react';
 import { useReactFlow } from '@xyflow/react';
 import type { NodeKind, AppNode, NodeData } from '../types';
 
@@ -13,6 +13,7 @@ const defaultForm = {
   kind: 'service' as NodeKind,
   description: '',
   url: '',
+  tags: '',
 };
 
 const inputClass =
@@ -28,7 +29,7 @@ function NodeForm({
   formId: string;
   form: typeof defaultForm;
   setForm: React.Dispatch<React.SetStateAction<typeof defaultForm>>;
-  onSubmit: (event: React.FormEvent) => void;
+  onSubmit: (event: SubmitEvent) => void;
   submitLabel: string;
 }) {
   return (
@@ -100,6 +101,24 @@ function NodeForm({
         />
       </div>
 
+      <div className="flex flex-col gap-1">
+        <label className="text-muted text-xs" htmlFor={`${formId}-tags`}>
+          Tags
+        </label>
+        <input
+          id={`${formId}-tags`}
+          className={inputClass}
+          value={form.tags}
+          onChange={(event) =>
+            setForm((func) => ({ ...func, tags: event.target.value }))
+          }
+          placeholder="e.g. infra, backend, db"
+        />
+        <span className="text-muted text-[11px] opacity-60">
+          Comma-separated
+        </span>
+      </div>
+
       <button
         type="submit"
         className="bg-primary hover:bg-primary-light mt-1 cursor-pointer rounded border-none px-3 py-2 text-[13px] font-semibold text-white transition-colors duration-150"
@@ -123,33 +142,38 @@ function EditSection({
     kind: selectedNode.data.kind,
     description: selectedNode.data.description ?? '',
     url: selectedNode.data.url ?? '',
+    tags: selectedNode.data.tags?.join(', ') ?? '',
   });
 
-  function handleUpdate(event: React.FormEvent) {
+  function handleUpdate(event: SubmitEvent) {
     event.preventDefault();
 
     if (!editForm.label.trim()) {
       return;
     }
 
+    const tags = editForm.tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
     onUpdateNode(selectedNode.id, {
       label: editForm.label.trim(),
       kind: editForm.kind,
       description: editForm.description.trim() || undefined,
       url: editForm.url.trim() || undefined,
+      tags: tags.length ? tags : undefined,
     });
   }
 
   return (
     <>
-      <div>
-        <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
-          Edit node
+      <div className="flex min-w-0 items-baseline gap-1.5">
+        <h2 className="text-muted m-0 shrink-0 truncate text-xs font-semibold tracking-widest uppercase">
+          Edit {selectedNode.data.label}
         </h2>
-        <p className="text-muted mt-1 mb-0 truncate text-[11px]">
-          {selectedNode.data.label}
-        </p>
       </div>
+
       <NodeForm
         formId={editFormId}
         form={editForm}
@@ -170,7 +194,7 @@ export default function Sidebar({
   const { screenToFlowPosition } = useReactFlow();
   const addFormId = useId();
 
-  function handleAdd(event: React.FormEvent) {
+  function handleAdd(event: SubmitEvent) {
     event.preventDefault();
 
     if (!addForm.label.trim()) {
@@ -182,6 +206,11 @@ export default function Sidebar({
       y: window.innerHeight / 2 + Math.random() * 100 - 50,
     });
 
+    const tags = addForm.tags
+      .split(',')
+      .map((tag) => tag.trim())
+      .filter(Boolean);
+
     onAddNode({
       id: `${Date.now()}`,
       type: addForm.kind,
@@ -191,6 +220,7 @@ export default function Sidebar({
         kind: addForm.kind,
         description: addForm.description.trim() || undefined,
         url: addForm.url.trim() || undefined,
+        tags: tags.length ? tags : undefined,
       } satisfies NodeData,
     });
     setAddForm(defaultForm);
@@ -199,28 +229,14 @@ export default function Sidebar({
   return (
     <aside className="bg-surface border-border flex w-60 shrink-0 flex-col gap-5 overflow-y-auto border-r p-5">
       {selectedNode ? (
-        <>
-          <EditSection
-            key={selectedNode.id}
-            selectedNode={selectedNode}
-            onUpdateNode={onUpdateNode}
-          />
-          <div className="border-border border-t pt-4">
-            <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
-              Add node
-            </h2>
-          </div>
-          <NodeForm
-            formId={addFormId}
-            form={addForm}
-            setForm={setAddForm}
-            onSubmit={handleAdd}
-            submitLabel="+ Add node"
-          />
-        </>
+        <EditSection
+          key={selectedNode.id}
+          selectedNode={selectedNode}
+          onUpdateNode={onUpdateNode}
+        />
       ) : (
         <>
-          <h2 className="text-muted m-0 text-[11px] font-semibold tracking-widest uppercase">
+          <h2 className="text-muted m-0 text-xs font-semibold tracking-widest uppercase">
             Add node
           </h2>
           <NodeForm

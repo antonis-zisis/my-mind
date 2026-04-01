@@ -12,14 +12,16 @@ export default function ServiceNode({
   selected,
 }: NodeProps<ServiceNodeType>) {
   const compact = useCompact();
-  const hasContent = !!(data.description || data.url);
+  const hasContent = !!(data.description || data.url || data.tags?.length);
 
   return (
     <div
-      className={`bg-service border-service-border text-service-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
-        selected ? 'shadow-[0_0_0_3px_rgba(16,185,129,0.4)]' : ''
+      className={`bg-service text-service-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
+        selected
+          ? 'border-white shadow-[0_0_0_3px_rgba(255,255,255,0.15)]'
+          : 'border-service-border'
       }`}
-      style={data.color ? { borderColor: data.color } : undefined}
+      style={!selected && data.color ? { borderColor: data.color } : undefined}
     >
       <Handle
         id="top"
@@ -59,6 +61,18 @@ export default function ServiceNode({
             >
               {data.url}
             </a>
+          )}
+          {data.tags && data.tags.length > 0 && (
+            <div className="mt-2 flex flex-wrap gap-1">
+              {data.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] leading-none opacity-70"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           )}
         </>
       )}
