@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   ReactFlow,
   Background,
@@ -7,6 +7,7 @@ import {
   BackgroundVariant,
   Panel,
   ConnectionMode,
+  useReactFlow,
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import type { AppEdge, AppNode } from '../types';
@@ -55,6 +56,17 @@ export default function DiagramCanvas({
   onBeforeDelete,
   saveStatus,
 }: Props) {
+  const { setCenter } = useReactFlow();
+
+  const handleNodeDoubleClick = useCallback(
+    (_: React.MouseEvent, node: AppNode) => {
+      const x = node.position.x + (node.measured?.width ?? 240) / 2;
+      const y = node.position.y + (node.measured?.height ?? 80) / 2;
+      setCenter(x, y, { zoom: 1.5, duration: 600 });
+    },
+    [setCenter]
+  );
+
   const minimapNodeColor = useMemo(
     () => (node: AppNode) => (node.type === 'project' ? '#6366f1' : '#10b981'),
     []
@@ -81,10 +93,11 @@ export default function DiagramCanvas({
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
         onBeforeDelete={onBeforeDelete}
+        onNodeDoubleClick={handleNodeDoubleClick}
         nodeTypes={nodeTypes}
         deleteKeyCode={['Delete', 'Backspace']}
         snapToGrid
-        snapGrid={[20, 20]}
+        snapGrid={[10, 10]}
         connectionMode={ConnectionMode.Loose}
         fitView
         fitViewOptions={{ padding: 0.3 }}
