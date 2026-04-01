@@ -16,10 +16,12 @@ export default function ServiceNode({
 
   return (
     <div
-      className={`bg-service border-service-border text-service-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
-        selected ? 'shadow-[0_0_0_3px_rgba(16,185,129,0.4)]' : ''
+      className={`bg-service text-service-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
+        selected
+          ? 'border-white shadow-[0_0_0_3px_rgba(255,255,255,0.15)]'
+          : 'border-service-border'
       }`}
-      style={data.color ? { borderColor: data.color } : undefined}
+      style={!selected && data.color ? { borderColor: data.color } : undefined}
     >
       <Handle
         id="top"
