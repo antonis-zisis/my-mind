@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { signOut } from 'firebase/auth';
 import { ReactFlowProvider } from '@xyflow/react';
+import type { OnBeforeDelete } from '@xyflow/react';
 import { auth } from '../lib/firebase';
 import { useAuth } from '../contexts/AuthContext';
 import { useDiagram } from '../hooks/useDiagram';
 import { CompactContext } from '../contexts/CompactContext';
 import DiagramCanvas from '../components/DiagramCanvas';
 import Sidebar from '../components/Sidebar';
+import ConfirmDialog from '../components/ConfirmDialog';
+import type { AppEdge, AppNode } from '../types';
 
 export default function DiagramPage() {
   const { user } = useAuth();
@@ -28,6 +31,41 @@ export default function DiagramPage() {
   const [compact, setCompact] = useState(
     () => localStorage.getItem('diagram-view') !== 'detailed'
   );
+
+  const [confirmMessage, setConfirmMessage] = useState<string | null>(null);
+  const resolveRef = useRef<((value: boolean) => void) | null>(null);
+
+  const handleBeforeDelete: OnBeforeDelete<AppNode, AppEdge> = useCallback(
+    ({ nodes: deletedNodes }) => {
+      if (deletedNodes.length === 0) {
+        return Promise.resolve(true);
+      }
+
+      const name =
+        deletedNodes.length === 1
+          ? `"${deletedNodes[0].data.label}"`
+          : `${deletedNodes.length} nodes`;
+
+      setConfirmMessage(`Delete ${name}? This cannot be undone.`);
+
+      return new Promise<boolean>((resolve) => {
+        resolveRef.current = resolve;
+      });
+    },
+    []
+  );
+
+  function handleConfirm() {
+    setConfirmMessage(null);
+    resolveRef.current?.(true);
+    resolveRef.current = null;
+  }
+
+  function handleCancel() {
+    setConfirmMessage(null);
+    resolveRef.current?.(false);
+    resolveRef.current = null;
+  }
 
   function handleCompactChange(value: boolean) {
     setCompact(value);
@@ -88,10 +126,19 @@ export default function DiagramPage() {
               onNodesChange={onNodesChange}
               onEdgesChange={onEdgesChange}
               onConnect={onConnect}
+              onBeforeDelete={handleBeforeDelete}
               saveStatus={saveStatus}
             />
           </div>
         </div>
+
+        {confirmMessage && (
+          <ConfirmDialog
+            message={confirmMessage}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+          />
+        )}
       </ReactFlowProvider>
     </CompactContext.Provider>
   );

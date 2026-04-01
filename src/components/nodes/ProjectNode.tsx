@@ -16,7 +16,7 @@ export default function ProjectNode({
 
   return (
     <div
-      className={`bg-project text-project-text w-50 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
+      className={`bg-project text-project-text w-60 rounded-[10px] border-2 px-4 py-3 text-sm transition-shadow ${
         selected
           ? 'border-white shadow-[0_0_0_3px_rgba(255,255,255,0.15)]'
           : 'border-project-border'
