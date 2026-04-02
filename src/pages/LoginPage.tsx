@@ -24,6 +24,7 @@ export default function LoginPage() {
 
     try {
       const result = await signInWithPopup(auth, googleProvider);
+
       if (getAdditionalUserInfo(result)?.isNewUser) {
         await deleteUser(result.user);
         setError('Access restricted. Only existing users can sign in.');
@@ -38,11 +39,12 @@ export default function LoginPage() {
   return (
     <div className="bg-bg flex h-dvh items-center justify-center">
       <div className="bg-surface border-border w-90 rounded-2xl border p-12 text-center shadow-2xl">
-        <div className="mb-4 text-5xl">🧠</div>
+        <div className="mb-4">
+          <img src="/favicon.svg" alt="My Mind" className="mx-auto h-12 w-12" />
+        </div>
+
         <h1 className="text-text mt-0 mb-2 text-3xl font-bold">My Mind</h1>
-        <p className="text-muted mt-0 mb-8 text-sm">
-          Your personal infrastructure map
-        </p>
+        <p className="text-muted mt-0 mb-8 text-base">Infrastructure Map</p>
 
         <button
           className="bg-surface-2 border-border text-text hover:bg-surface hover:border-primary flex w-full cursor-pointer items-center justify-center gap-2.5 rounded-lg border px-4 py-3 text-sm font-medium transition-colors duration-150"
